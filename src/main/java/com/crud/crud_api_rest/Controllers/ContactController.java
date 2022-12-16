@@ -45,13 +45,14 @@ public class ContactController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Optional<Contact>> getContactById(@PathVariable Long id){
-        Optional<Contact> contact;
-        try{
-            contact = contactRepository.findById(id);
+
+        Optional<Contact> contact = contactRepository.findById(id);
+
+        if(contact.isPresent()){
+        
             return new ResponseEntity<Optional<Contact>>(contact,HttpStatus.OK);
-        }catch(NoSuchElementException nsee){
-            return new ResponseEntity<Optional<Contact>>(HttpStatus.NOT_FOUND);
-        }   
+        }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
     }
 
     @DeleteMapping(path = "/{id}")
@@ -81,7 +82,11 @@ public class ContactController {
     public ResponseEntity<List<Contact>> findByName(@PathVariable String name){
         List<Contact> contacts = new ArrayList<>();
         contacts = contactRepository.findName(name.toUpperCase());
-        return new ResponseEntity<>(contacts, HttpStatus.OK);
+
+        if(!contacts.isEmpty()){
+            return new ResponseEntity<>(contacts, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
