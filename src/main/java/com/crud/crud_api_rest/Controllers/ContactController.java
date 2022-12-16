@@ -49,7 +49,6 @@ public class ContactController {
         Optional<Contact> contact = contactRepository.findById(id);
 
         if(contact.isPresent()){
-        
             return new ResponseEntity<Optional<Contact>>(contact,HttpStatus.OK);
         }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
