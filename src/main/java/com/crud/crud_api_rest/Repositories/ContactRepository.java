@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.crud.crud_api_rest.Models.Contact;
 
-public interface ContactRepository extends JpaRepository<Contact, Long>{
+public interface ContactRepository extends JpaRepository<Contact, Long> {
 
-    @Query(value = "SELECT * FROM Contact c WHERE c.Name like %?%", nativeQuery = true)
+    @Query(value = "SELECT * FROM Contact c WHERE UPPER(c.Name) like %?%", nativeQuery = true)
     List<Contact> findName(String name);
-    
+
 }
