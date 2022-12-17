@@ -9,7 +9,7 @@ import com.crud.crud_api_rest.Models.Contact;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 
-    @Query(value = "SELECT * FROM Contact c WHERE UPPER(c.Name) like %?%", nativeQuery = true)
+    @Query(value = "SELECT c FROM Contact c WHERE UPPER(c.name) like %?1%")
     List<Contact> findName(String name);
 
 }
