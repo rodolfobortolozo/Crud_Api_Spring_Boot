@@ -56,13 +56,14 @@ public class ContactController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
 
-        if (contactRepository.findById(id).isPresent()) {
-            contactRepository.deleteById(id);
-            return new ResponseEntity<String>("Registro Deletado", HttpStatus.OK);
-        }
-        return new ResponseEntity<String>("Registro Não Encontrado", HttpStatus.NOT_FOUND);
+        return contactRepository.findById(id)
+                .map(record -> {
+                    contactRepository.deleteById(id);
+                    return ResponseEntity.ok().build();
+                }).orElse(ResponseEntity.notFound().build());
+
     }
 
     @PutMapping(value = "/{id}")
