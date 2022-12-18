@@ -33,15 +33,29 @@ public class ContactController {
 
     @GetMapping
     public ResponseEntity<List<Contact>> getContact() {
-        List<Contact> contacts = new ArrayList<>();
-        contacts = contactRepository.findAll();
-        return new ResponseEntity<>(contacts, HttpStatus.OK);
+        try {
+            List<Contact> contacts = new ArrayList<>();
+            contacts = contactRepository.findAll();
+
+            if (contacts.isEmpty() || contacts.size() == 0) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(contacts, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
     public ResponseEntity<Contact> postContact(@RequestBody Contact contact) {
-        contactRepository.save(contact);
-        return new ResponseEntity<>(contact, HttpStatus.OK);
+        try {
+            contactRepository.save(contact);
+            return new ResponseEntity<>(contact, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(path = "/{id}")
@@ -82,7 +96,7 @@ public class ContactController {
     @GetMapping(path = "/searchname/{name}")
     public ResponseEntity<List<Contact>> findByName(@PathVariable String name) {
         List<Contact> contacts = new ArrayList<>();
-        contacts = contactRepository.findName(name.toUpperCase());
+        contacts = contactRepository.findByNameContaining(name);
 
         if (!contacts.isEmpty()) {
             return new ResponseEntity<>(contacts, HttpStatus.OK);
@@ -93,7 +107,7 @@ public class ContactController {
     @GetMapping(path = "/searchname")
     public ResponseEntity<List<Contact>> findByNameParam(@RequestParam String name) {
         List<Contact> contacts = new ArrayList<>();
-        contacts = contactRepository.findName(name.toUpperCase());
+        contacts = contactRepository.findByNameContaining(name.toUpperCase());
 
         if (!contacts.isEmpty()) {
             return new ResponseEntity<>(contacts, HttpStatus.OK);
