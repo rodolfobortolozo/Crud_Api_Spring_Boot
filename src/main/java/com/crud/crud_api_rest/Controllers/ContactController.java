@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.crud.crud_api_rest.Models.Contact;
 import com.crud.crud_api_rest.Repositories.ContactRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/contacts/v1")
 
@@ -48,7 +50,7 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<Contact> postContact(@RequestBody Contact contact) {
+    public ResponseEntity<Contact> postContact(@Valid @RequestBody Contact contact) {
         try {
             contactRepository.save(contact);
             return new ResponseEntity<>(contact, HttpStatus.OK);
