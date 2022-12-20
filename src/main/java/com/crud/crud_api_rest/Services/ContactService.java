@@ -1,40 +1,26 @@
-package com.crud.crud_api_rest.Controllers;
+package com.crud.crud_api_rest.Services;
 
 import java.util.ArrayList;
 import java.util.List;
-// import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.crud.crud_api_rest.Models.Contact;
 import com.crud.crud_api_rest.Repositories.ContactRepository;
 
-import jakarta.validation.Valid;
-
-@RestController
-@RequestMapping(value = "/contacts/v1")
-
-public class ContactController {
-
+@Service
+public class ContactService {
+    
     private ContactRepository contactRepository;
 
-    ContactController(ContactRepository contactRepository) {
+    ContactService(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
-
-    @GetMapping
-    public ResponseEntity<List<Contact>> getContact() {
+    
+    public ResponseEntity<List<Contact>> getAllContact() {
         try {
             List<Contact> contacts = new ArrayList<>();
             contacts = contactRepository.findAll();
@@ -49,9 +35,9 @@ public class ContactController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Contact> postContact(@Valid @RequestBody Contact contact) {
+    public ResponseEntity<Contact> postContact(Contact contact) {
         try {
+            contact.setId(null); //Para Garantir que esse método só vai inserir no Banco de Dados
             contactRepository.save(contact);
             return new ResponseEntity<>(contact, HttpStatus.OK);
 
@@ -60,8 +46,7 @@ public class ContactController {
         }
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<Contact>> getContactById(@PathVariable Long id) {
+    public ResponseEntity<Optional<Contact>> getContactById(Long id) {
 
         Optional<Contact> contact = contactRepository.findById(id);
 
@@ -71,8 +56,7 @@ public class ContactController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(Long id) {
 
         return contactRepository.findById(id)
                 .map(record -> {
@@ -82,8 +66,7 @@ public class ContactController {
 
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Contact> updateById(@PathVariable Long id, @RequestBody Contact newContact) {
+    public ResponseEntity<Contact> updateById(Long id, Contact newContact) {
 
         return contactRepository.findById(id)
                 .map(contact -> {
@@ -95,8 +78,7 @@ public class ContactController {
                 }).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(path = "/searchname/{name}")
-    public ResponseEntity<List<Contact>> findByName(@PathVariable String name) {
+    public ResponseEntity<List<Contact>> findByName(String name) {
         List<Contact> contacts = new ArrayList<>();
         contacts = contactRepository.findByNameContaining(name);
 
@@ -106,8 +88,7 @@ public class ContactController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(path = "/searchname")
-    public ResponseEntity<List<Contact>> findByNameParam(@RequestParam String name) {
+    public ResponseEntity<List<Contact>> findByNameParam(String name) {
         List<Contact> contacts = new ArrayList<>();
         contacts = contactRepository.findByNameContaining(name.toUpperCase());
 
@@ -116,5 +97,4 @@ public class ContactController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.crud.crud_api_rest.Controllers;
+package com.crud.crud_api_rest.Resources;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

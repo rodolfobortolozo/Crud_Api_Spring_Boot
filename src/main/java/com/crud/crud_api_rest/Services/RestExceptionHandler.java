@@ -1,4 +1,4 @@
-package com.crud.crud_api_rest.Controllers;
+package com.crud.crud_api_rest.Services;
 
 import java.util.List;
 import java.util.stream.Collectors;
