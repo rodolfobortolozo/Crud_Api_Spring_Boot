@@ -4,7 +4,7 @@ O objetivo deste projeto é construir um exemplo de API Rest usando Spring Boot,
 
 Com o tempo novas funcionalidades podem ser adicionadas, conforme as ideias e sugetões forem surgindo.
 
-A classe **RestExceptionHandler** tratar as mensagem de validação dos campos que estiverem faltando
+A classe **RestExceptionHandler** trata as mensagem de validação dos campos que estiverem faltando
 
 ` {
 	"message": "Requisição possui campos inválidos",
